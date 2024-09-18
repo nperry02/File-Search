@@ -1,0 +1,195 @@
+/**********************************************************
+* Project 4: gerp
+* CS 15
+* README
+* Nate Perry (nperry02)
+* Josh Blum (jblum02)
+* 4/17/23
+*
+*********************************************************/
+
+
+B. Program Purpose:
+
+this program can be used to search through files and directories given
+by the user, and searches for case sensitive or non sensitive searches. 
+different command line commands can be used to search for a word either
+case sensitive or non sensitive, change output file, or quit.
+
+C. Acknowledgements: 
+
+StackOverflow -- how to make an iterator
+C++.com -- reserve and emplace_back vector functions
+
+D. Files:
+
+main.cpp:
+     simple driver function. The program as a whole goes through the files 
+     given, and creates a seach function where the user can look for
+     words case sensitive or insensitive and puts answers into a file
+     or files.
+
+Gerp.h:
+    This is the class runs the gerp search and outputs
+    every line of the searched words into a outfile. The class
+    represents a search function that searches through the 
+    diectorys and files given. The client gives inputs of
+    what to search for in the given directory, either case 
+    sensitive or not, and can also chnage where the everyhting
+    should be outputed.
+
+Gerp.cpp:
+    Defines the constructor and all functions for the gerp class.
+    These functions facilitate the entire program, namely the 
+    runGerp function which runs the program and the query function
+    that handles user commands. Also includes functions to build
+    the path and process the user given word.
+
+hashTable.h: 
+    This is the class which the gerp search uses to store
+    all the lines in the file and where each word is being used. The class
+    represents the storage of the files. The vector begins with nothing in it.
+    But adds the lines of the files when the code is run, adding buckets
+    to hold where each word is used
+
+hashTable.cpp:
+    Defines the constructor and all functions for the hashTable
+    class. The functions in this class handle the creation of
+    new buckets and insertion of words into preexisting buckets.
+    Other funcitons handle getting all of the lines where a word
+    was used. 
+
+bucket.h:
+    This is the class that stores the words used in the files
+    and where the lines are positioned in the vector of lines in
+    hashTable. The buckets are created when gerp is ran, and are used
+    when trying to find where each word is used in the files.
+
+bucket.cpp:
+    Defines the constructors, destrucor and all functions for 
+    the bucket class. The functions are responsible for filling
+    buckets, determining if a word matched a bucket, and for
+    getting the locations for where the lines are stored in the 
+    allLines vector. 
+
+Makefile: 
+    conpiles the files.
+
+ReadMe: this file
+
+unit_tests.h:
+    header file including all of the test functions for the 
+    different implementations that are run by 'unit_test'.
+
+nonAlphaNum-query.txt:
+    testing function that tested what happens if searching
+    for a word only made of non alpha-numeric letters.
+
+E. Compile/run:
+     - Compile using
+            make gerp
+     - run executable with
+            ./gerp inputDirectory outputFile
+
+F. Architectural overview
+    Main creates an instance of the gerp class and run runGerp.
+    Gerp class creates an instance of the hashTable class,
+        goes through the files and puts the lines into hashtable class 
+        through the addLine() function and adds the words and line numbers
+        to hashtable class through insert()
+    hashtable: uses the bucket class as it creates instances of buckets in
+        the 3d vector and puts into each bucket a word given by gerp and 
+        the line number. hashtable also gets the set of line numbers from
+        bucket during returnSet().
+
+G. Data Structures and Algorithms:
+
+vectors:
+    I used vectors twice in this program. vectors were a crucial data 
+    strucutre in our program as they
+    were used to organize and store the structs which contained data from
+    each key-value pair. since the data in vectors is stored contiguously
+    it made accessing the data efficient and iterating through the vector
+    easy. since vectors cant typically store multiple data types, I 
+    elected to make vectors of structs, which made it easy to access
+    the necessary data of either type any any given time. To do this We
+    created a 3-d array as it allowed for a fast way to go through 
+    the process. Array 1 holds the hashtable for the case insensitive version
+    of the word. Array 2 is collisions with other case insensitive words. 
+    Array 3 holds struct with the case sensitive word and line numbers.
+    I also used a vector to store the lines of code seperetly from the key
+    value pair as it was easy to search for the line and so I did not have to 
+    use more storage.
+sets:
+    I used sets in our program. sets are a data structure that contain unique
+    elements of each of its objects it contains. sets were crutial to our
+    program as they were used to store the place of the line used for the word
+    in our struct. This was good as sets can only store unique elements, 
+    allowing them to get rid of having out code output the same line twice.
+hashes:
+    I used hashes in out program. Hashes take in a key and turn them into a
+    unique int. this was helpful as it allowed us to store the structs in the
+    vector easily by putting them into the place designated by the hash.
+    his also allows easy access to the spot in the 3-d vector as it allowed
+    us to get the name of the word and find its spot in the vector through 
+    hashing.
+key-value pairs algorithm:
+    another algorithm that was crucial to the program was my method of
+    storing key-value pairs in vectors to organize our data and make it
+    easily accessible. to do this, I stored the key-value pairs
+    in structs, and then pushed those structs onto a
+    3-d vector of type struct. these vectors were used to store the word
+    and the lines the word were used on and made accessing data efficient
+    and easy. 
+    originally, our idea was to store all of the lines the word was used
+    in a set in the bucket struct. however, after implementing this I realized
+    that it took up too much space. I had to adapt our algorithm by storing
+    the location in the allLines vector that the lines were stored, instead of
+    the lines themselves. this saved a significant amount of space while
+    remaining easy to access every line. 
+chaining:
+    another algorithm used in this program was chaining to handle collisions. 
+    chaining involves storing multiple items in the same bucket of the hash 
+    table. in this program, each bucket of the hash table is implemented as a 
+    vector of linked lists, where each linked list stores all items with the 
+    same hash value. when a new item needs to be added to the hash table, the 
+    program first computes the hash value of the key and then inserts the new 
+    item into the linked list of the matching bucket.
+
+H. Testing:
+     
+    unit_test:
+        I used unit_test largly in the beginning of out project. Here I 
+        tested both phase one functions. Most tests added on to each other,
+        as they tested different portions of the 2 beginning functions. 
+        what I tested for isAlphNum is to see if it got rid of the front and
+        back of non alpha num parts, what it would do for a regular word, or 
+        what it would do for something fully non alpha num. These test were
+        done using the files from phase 1 so they are not runnable for final
+        submission. I also tested the file string maker seeing if it really
+        printed all the strings just as the demo did. This was tough
+        initially to figure out where each part went, and to make it keep only
+        the parts I want and get rid of the parts not used again,like file
+        name. to solve this, I made a helper function which did not pass a
+        pointer so it would not stay in the string forever. I also tested
+        out initial insert and search functions where by making the vector
+        public and testing with it. I later made the vector private again 
+        once I correctly made those functions.
+
+    diff:
+        after our program was working, I used diff testing with the provided
+        files and the demo program to make sure our program was working as 
+        expected. I first used the test file keep-query-insensitive test To
+        test out code to see if it worked. I are not provideing any of our
+        diff files as the files are too big to provide. with the 
+        I used this file to test all three sizes of directories. When 
+        testing with this, I figured out that I were duplicating lines of 
+        code if they included two different ways of upper/lower case versions
+        of the same words. I fixed this by adding all the sets of line 
+        numbers together before printing them out so duplicates would be erased.
+        Then I ran the diffs again and they worked. I also used the 
+        long-query.txt and the champions-query.txt given to us to test our code
+        I also made a nonAlphaNum-query.txt file that I are submitting which 
+        tested what would happen if the query was full of only non 
+        Alpha-numeric letters. With these test, I got a full range of
+        possibilities of what the gerp can do.
