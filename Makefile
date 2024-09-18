@@ -2,7 +2,7 @@
 ### Makefile for Gerp Project
 ### Gerp is a search function for words in a file
 ###
-### Josh Blum (jblum02) Nate Perry (nperry02)
+### Nate Perry (nperry02)
 
 MAKEFLAGS += -L
 
