@@ -38,6 +38,7 @@ class Gerp{
 
     private:
         hashTable h;
+        
         void FSTreeTraversal(DirNode *root, string dList, int &lineNum);
         void traversalHelper(DirNode *root, string dList, int i, int &lineNum);
         void runDir(string &dList, int &lineNum);
