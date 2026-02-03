@@ -10,6 +10,7 @@
     what to search for in the given directory, either case 
     sensitive or not, and can also chnage where the everyhting
     should be outputed.
+    This works.
  *           
  */
 
